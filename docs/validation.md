@@ -61,3 +61,11 @@ Python 3.12.14, Node.js 24.19.0, Python Playwright 1.62.0, 시스템 Chromium 15
 환경 초안에 제한 허용8개 도메인, `install_script`와 `start_skill`을 저장했다. 설치 스크립트는 기존 Python·Playwright·Chromium 확인과 데이터 테스트·검증·빌드를 수행하며, 실제로 `/tmp`에서 실행해 정상 동작을 확인했다. 시작 지침에는 작업 디렉터리·정적 서버 시작·실제 응답 준비 확인을 포함했다.
 
 환경 도구가 반환한 저장 결과는 saved이며 requires_publish=true였다. 환경 설정 검토·저장과 환경 Publish는 사용자의 다음 동작이다. 아직 런타임 네트워크 적용·환경 발행·새 작업 복원을 검증한 것이 아니다. 이 절차는 GitHub Pages 공개 배포와 다르다.
+
+## GitHub 전달 결과
+
+작업 브랜치 `codex/financial-research-desk-v1`를 origin에 실제 전송하고 원격 SHA와 로컬 SHA가 일치함을 확인했다. 기본 브랜치 main은 변경하지 않았다.
+
+[초안 PR #1](https://github.com/Ryu-Chaerin/financial-research-desk/pull/1)을 생성했다. `gh pr view`로 OPEN·isDraft=true·대상 main을 확인했다. PR 생성은 병합이나 사이트 배포가 아니다.
+
+최초 GitHub REST 요청은 Forbidden이었지만 이후 기존 인증을 사용한 `gh pr create`·`gh pr view`·`gh repo view`가 성공했다. 따라서 GitHub API 전체를 사용할 수 없다고 단정하지 않는다. 저장소는 PUBLIC, 현재 권한은 ADMIN으로 확인됐다. 공개 저장소 GitHub Pages 무료 사용 조건에 맞지만, Pages 활성화·배포 성공은 검증하거나 실행하지 않았다. 토큰값은 출력하지 않았다. 금융 원문 도메인 차단이 해제됐다는 근거는 여전히 없다.

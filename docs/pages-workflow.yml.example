@@ -1,0 +1,35 @@
+# 별도 공개 배포 승인 후에만 .github/workflows/pages.yml 로 복사합니다.
+# 현재 파일은 템플릿이며 어떤 GitHub Actions 실행도 등록하지 않습니다.
+name: Deploy research desk manually
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate and build
+        run: |
+          python3 -m unittest discover -s tests -v
+          python3 scripts/validate.py
+          python3 scripts/build.py
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

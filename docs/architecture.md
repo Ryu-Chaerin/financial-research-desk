@@ -35,6 +35,12 @@ dist/ → 공개 배포 승인 후 GitHub Pages
 
 연구 상태는 `COMPLETED`, `PARTIAL`, `BLOCKED`다. Reviewer 결과는 `PASS`, `REVISE`, `INSUFFICIENT_EVIDENCE`이며 미실행은 결과 `null`과 `NOT_RUN`으로 구분한다. 실제 검토는 했지만 원문을 읽지 못하면 검토 실행은 완료, 결과는 `INSUFFICIENT_EVIDENCE`다. 이는 사실 확인 완료를 뜻하지 않는다.
 
+## 확정 보고서와 조사 기록
+
+기존 JSON 계약을 유지하며 `research_status=COMPLETED`와 `review.status=PASS`를 모두 만족할 때만 확정 보고서다. 홈·기업 화면은 최신 확정 보고서를 별도로 선택한다. 더 최근의 PARTIAL·BLOCKED·REVISE·검토 미실행 기록이 이를 대체하지 않는다. 확정본이 없으면 없다고 표시한다. 모든 실행은 이력에서 계속 열 수 있고 상세 화면도 초안·차단 여부를 표시한다.
+
+PARTIAL은 실제 자료를 일부 확인한 조사 초안이며 최종 확정을 보류한다. 공식 자료와 기간 내 DART 공시 확인이 빠지면 Reviewer는 INSUFFICIENT_EVIDENCE를 기록한다. 기존 차단 이력과 데이터 계약은 변경하지 않는다.
+
 ## 개인 메모와 공개 경계
 
 메모는 보고서 실행별 localStorage에만 저장한다. 네트워크·Git에 메모를 보내는 코드가 없다. 같은 브라우저의 같은 사이트에서만 보이며, 기기 동기화가 없고 브라우저 데이터 삭제 시 사라질 수 있다. 해당 브라우저 프로필을 공유하는 사람도 볼 수 있으므로 민감정보 저장소로 쓰지 않는다. 보고서 JSON·실행 이력은 배포 시 공개될 자료다.

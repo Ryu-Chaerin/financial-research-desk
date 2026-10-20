@@ -1,0 +1,170 @@
+# SK하이닉스 리서치
+
+실행 ID: skhynix-20261020t165559-kst
+
+기업 코드: 000660
+
+실행 시각: 2026-10-20T16:55:59+09:00 (Asia/Seoul)
+
+대상 기간: 2026-10-13T16:55:59+09:00 ~ 2026-10-20T16:55:59+09:00
+
+조사 상태: PARTIAL
+
+## 분석 주제
+
+조사 초안 · OCP 발표 및 다롄·미국 투자 연계 보도와 회사 반론 — 최종 확정 보류
+
+## 요약
+
+공식 OCP 발표에서 CXL 메모리·시스템 PoC 소개를 확인했습니다. Reuters의 다롄 장비 허가·미국 투자 연계 보도와 회사 반론도 확인했지만 확정된 허가·투자 결정으로 보지 않습니다. DART 기간 공시와 핵심 IR 내용을 확인하지 못해 최종 확정을 보류하는 조사 초안입니다.
+
+## 주요 사건 · 사실과 해석
+
+
+### OCP 행사에서 CXL 메모리·AI 시스템 실증 결과 소개
+
+사건 ID: ocp-cxl-demo · 사건일: 미확인 · 범위: DIRECT
+
+**확인된 사실**
+
+- SK하이닉스는 10월16일 공식 글에서 10월12~15일 미국 산호세 OCP 행사 참가를 알렸다. 기간은 조사 창과 일부 겹치지만 개별 시연일은 확인되지 않았다. \[출처: skhynix-ocp-20261016\]
+- 회사는 CXL 3.2 기반 2세대 256GB CMM-DDR5와 메모리 중심 시스템을 소개하고, NAVER Cloud와의 KV 캐시·임베딩 공유 검증을 PoC 단계라고 설명했다. \[출처: skhynix-ocp-20261016\]
+
+**분석적 해석**
+
+- 이번에 확인한 변화는 제품·시스템 시연 내용의 공개다. 고객 채택이 확대되면 서버 메모리 사업 기회로 이어질 수 있지만, 시연을 수주나 매출 확정으로 볼 수 없다. \[출처: skhynix-ocp-20261016\]
+
+**영향 경로와 성립 조건**
+
+- 매출: 시스템 검증 → 고객 평가·채택 → 제품 공급으로 연결될 때 매출 기회가 생긴다.
+  - 조건: 고객 검증 통과 및 상용 주문
+  - 조건: 호환 서버·소프트웨어 생태계 지원
+- 수익성: 제품 차별화가 가격과 판매 구성 개선으로 이어져야 이익 기여가 가능하다.
+  - 조건: 추가 개발·지원 비용을 웃도는 판매 이익
+  - 조건: 양산 수율·원가 경쟁력 확보
+
+**반대 근거 및 한계**
+
+- 공식 홍보 자료이며 성능을 외부에서 재현·검증하지 않았다.
+- PoC는 상용 도입이 아니다. 인용 원문만으로 주문 규모·납기·재무 기여를 확정할 수 없다.
+- 행사는10월12일에 시작해 조사기간 이전 활동도 포함한다. 게시일을 전체 기술의 최초 발표일로 간주하지 않는다.
+
+**추후 확인할 항목**
+
+- 고객의 상용 채택·출하 확인
+- CXL 제품 매출·제품 구성에 대한 후속 IR
+- 공시로 확인되는 실제 주문·투자
+
+### 다롄 장비·미국 투자 연계 보도와 회사 반론
+
+사건 ID: dalian-us-license-report · 사건일: 미확인 · 범위: DIRECT
+
+**확인된 사실**
+
+- Reuters는10월15일 익명 취재원에 근거해 다롄 장비 허가와 미국 공장 계획의 연계를 보도했다. 회사는 협의·승인하에 장비를 설치하며 Mod B 증설을 추진하지 않는다고 답했다. \[출처: reuters-dalian-20261015\]
+
+**분석적 해석**
+
+- 보도는 확정 투자 공시가 아니다. 허가·투자 불확실성을 점검할 사안이다. \[출처: reuters-dalian-20261015\]
+
+**영향 경로와 성립 조건**
+
+- 위험요인: 장비 허가 지연은 생산 운영 제약으로 이어질 수 있다.
+  - 조건: 추가 허가 필요성과 실제 제약 확인
+- 설비투자: 투자 확정 시 현금 지출이 늘 수 있다.
+  - 조건: 공식 투자 결정·규모 확인
+
+**반대 근거 및 한계**
+
+- 익명 보도와 회사 설명이 다르다. 승인·증설을 확정하지 않는다.
+
+**추후 확인할 항목**
+
+- 허가 결과와 회사 공시
+- 투자금·일정·자금조달
+
+## 전체 한계
+
+- 공식 뉴스룸·Reuters 원문 접근은 성공했지만 기간 내 DART 공시 확인은 실패했다. 최종 분석 확정을 보류한다.
+- 공식 공시·실적 페이지는 열렸으나 최신 목록·내용이 추출되지 않았다.0/0을 공시 부재로 해석하지 않는다.
+- 두 사건의 계약·시연 개별 발생일은 확인되지 않았다. 게시일과 사건일을 동일시하지 않았다.
+- 관련 기업의 독립 발표는 추가 확보하지 못했다. 회사 홍보와 익명 보도의 한계를 남긴다.
+- 주가·기대치 자료를 검증하지 않아 이미 반영됐는지 또는 미반영됐는지 판단하지 않는다.
+- 168시간 시작일의 자료는 날짜만으로 포함을 확정할 수 없으나, 이번 선정 게시물은10월15·16일로 경계일이 아니다.
+
+## 후속 확인
+
+- DART 기간 공시 목록과 해당 원문을 확인한 뒤 최종 확정 여부 판단
+- 공식 IR 최신 실적·투자 발표의 실제 내용 확인
+- CXL 고객 채택과 장비 허가·투자 결정 후속 확인
+
+## 사용한 원문 자료
+
+- skhynix-ocp-20261016: “Memory-Centric Server Systems Are the Future”: SK hynix Presents Its Next-Generation AI Infrastructure Vision at OCP Global Summit 2026
+  - 게시일: 2026-10-16
+  - URL: <https://news.skhynix.com/en/ocp-global-summit-2026/>
+  - 조회 시각: 2026-10-20T16:56:39+09:00 · 상태: VERIFIED
+  - 확인 근거: 본문46행 행사10/12~15, 58행 CXL3.2·256GB 2세대 제품, 65행 NAVER Cloud PoC를 확인했다. 성능·사업화는 회사 주장 범위로 제한한다.
+- reuters-dalian-20261015: SK Hynix conditions new US factory on more US chip equipment exports to China, sources say
+  - 게시일: 2026-10-15T11:02:00+09:00
+  - URL: <https://www.reuters.com/world/asia-pacific/sk-hynix-conditions-new-us-factory-more-us-chip-equipment-exports-china-sources-2026-10-15/>
+  - 조회 시각: 2026-10-20T16:56:39+09:00 · 상태: VERIFIED
+  - 확인 근거: 본문168행 취재원 주장, 176~178행 회사 반론. 게시시각은 본문에 표시된02:02 UTC를 한국시각으로 변환했다.
+- skhynix-fenand-background-20261014: \[Inside the Research\] In the AI era, NAND moves beyond storage to computing… 3D FeNAND co-optimization at IEEE
+  - 게시일: 2026-10-14
+  - URL: <https://news.skhynix.com/en/research-inside-ep2/>
+  - 조회 시각: 2026-10-20T16:56:39+09:00 · 상태: VERIFIED
+  - 확인 근거: 10월14일 게시됐지만50~52행에서2025 IEEE IEDM 논문을 소개한다고 명시한다. 새 연구 성과 발생으로 선정하지 않고 배경 자료로만 확인했다.
+
+## Reviewer 검증 결과
+
+실행 상태: COMPLETED
+
+검증 결과: INSUFFICIENT\_EVIDENCE
+
+검토자: /root/reviewer\_resume
+
+직접 확인한 출처: skhynix-ocp-20261016, reuters-dalian-20261015, skhynix-fenand-background-20261014
+
+- INFO: 공식 OCP 글의 게시일·행사기간, CXL 3.2·256GB·PoC 표현을 원문으로 확인했다. 시연을 상용 주문으로 확정하지 않은 해석은 적절하다. \(사건: ocp-cxl-demo, 출처: skhynix-ocp-20261016\)
+- INFO: Reuters 원문에서 취재원 주장과 회사 반론을 모두 확인했다. 기사 게시일과 실제 투자 결정일은 구분해야 하며 확정 투자로 볼 근거는 없다. \(사건: dalian-us-license-report, 출처: reuters-dalian-20261015\)
+- WARNING: FeNAND 글은 2025 IEDM 연구 소개여서 새 사건에서 제외하는 판단을 확인했다. \(사건: 전체, 출처: skhynix-fenand-background-20261014\)
+- ERROR: Reviewer의 DART 기간검색도 Internal Error로 끝났다. 기간 내 공시 전체와 선정 사건 관련 공시를 확인하지 못해 최종 확정을 보류한다. \(사건: 전체, 출처: 없음\)
+- WARNING: 수정 요청: 요약·제목에서도 Reuters 내용을 확정된 장비 허가·투자 결정이 아닌 보도로 표시하고, 초안·최종 확정 보류를 명시한다. \(사건: dalian-us-license-report, 출처: reuters-dalian-20261015\)
+
+검토의 한계:
+
+- DART 기간 공시 목록·관련 공시 원문은 확인하지 못했다.
+- 공식 회사 주장과 언론의 익명 취재원 진술을 확인했을 뿐 기술 성능·계약·허가 사실을 독립적으로 실증하지 않았다.
+- 주가·기대치를 검증하지 않아 시장 반영 여부를 판단하지 않는다.
+
+## 실제 에이전트 수행 이력
+
+- Research Manager (/root) · COMPLETED
+  - 요청: 범위 고정·실제 위임·수정1회·검토 결과 보존
+  - 실행: 2026-10-20T16:55:59+09:00 ~ 2026-10-20T16:59:57+09:00
+  - 수행 결과: Researcher와 별도 Reviewer를 실제 실행했습니다. Reviewer 요청을1회 반영해 제목·요약에 보도/회사 반론과 최종 확정 보류를 명시했습니다. DART 미확인 지적을 해결했다고 주장하지 않았으며 추가 재검토하지 않았습니다. 개발 검증·GitHub 전달 결과는 docs/validation.md에 별도로 기록합니다.
+- Researcher (/root/researcher\_resume) · PARTIAL
+  - 요청: 공개 원문 조사·사건 최대3개 초안
+  - 실행: 2026-10-20T16:56:21+09:00 ~ 2026-10-20T16:56:55+09:00
+  - 수행 결과: 독립 Researcher로 공개 웹 조회 도구3회\(검색·열기·링크·본문확인\)를 수행했다. 원문2건으로 사건2개 초안을 만들고 과거연구 재소개1건을 제외했다. 터미널로 인터넷 요청하거나 외부 LLM·유료 API를 사용하지 않았다. 최종 보고서 작성·Reviewer 검증은 Manager 후속 업무다.
+- Reviewer (/root/reviewer\_resume) · COMPLETED
+  - 요청: 별도 에이전트의 출처·수치·해석 독립 검토
+  - 실행: 2026-10-20T16:58:37+09:00 ~ 2026-10-20T16:59:18+09:00
+  - 수행 결과: Researcher와 별도 하위 에이전트로 원문3개를 직접 재확인하고 DART 기간검색을 독립 시도했다. 웹 도구3회, 검토1회. 수정요청1건을 Manager에 전달하며 재검토·사이트 수정·유료 API 사용은 하지 않았다.
+- Designer &amp; Developer (/root) · COMPLETED
+  - 요청: 기존 정적 사이트의 확정/초안 구분·테스트·문서 보완
+  - 실행: 2026-10-20T16:55:59+09:00 ~ 2026-10-20T16:59:57+09:00
+  - 수행 결과: Manager와 동일한 실제 에이전트가 개발을 수행했습니다. 별도 개발 하위 에이전트는 실행하지 않았습니다. 최신 확정 보고서 영역과 초안·차단 이력 구분, 브라우저 회귀 검증을 추가했습니다. 이 시간은 보고서 저장 전 개발 완료 기준이며 이후 통합 검증은 docs/validation.md에 기록합니다.
+
+## 실패 또는 미완료 항목
+
+- Researcher · DART 공개 홈: 공개 웹 조회 도구가502 Bad Gateway를 반환했다. \| URL: https://dart.fss.or.kr/ \| 해결: 접근 회복 후 기간 검색과 실제 공시 원문을 확인한다. 현재는 최종 확정을 보류한다.
+- Researcher · DART 기간검색: 공개 웹 조회 도구 Internal Error로 기간 공시를 확인하지 못했다. \| URL: https://dart.fss.or.kr/dsab002/main.do?autoSearch=true&amp;textCrpNm=000660&amp;startDate=20261013&amp;endDate=20261020 \| 해결: 공개 검색이 정상 동작할 때 회사·기간 조건을 확인하고 재조사한다.
+- Researcher · 공식 공시 목록: 웹 페이지는 열렸지만 추출본은 Date Search와0/0만 표시했다. 실제 기간 공시 조회 성공이 아니다. \| URL: https://www.skhynix.com/ir/UI-FR-IR12\_T1/ \| 해결: 목록과 각 공시의 실제 내용을 확인할 수 있을 때 검증한다.
+- Researcher · 공식 실적 자료: Latest Earnings Release 영역에 날짜·실적 내용이 없고 외부 첨부 링크만 추출됐다. 첨부는 확인하지 않았다. \| URL: https://www.skhynix.com/ir/UI-FR-IR06/ \| 해결: 필요 시 첨부 호스트 접근 조건을 확인하고 실제 파일을 검토한다.
+- Researcher · KIND: 웹 조회 결과0줄로 목록·공시를 확인할 수 없었다. \| URL: https://kind.krx.co.kr/ \| 해결: 검색 결과와 원문이 추출되는 경로에서 확인한다.
+- Reviewer · DART 기간검색: 공개 웹 조회 도구가 Internal Error를 반환해 기간 공시를 확인하지 못했다. \| URL: https://dart.fss.or.kr/dsab002/main.do?autoSearch=true&amp;textCrpNm=000660&amp;startDate=20261013&amp;endDate=20261020 \| 해결: 공개 검색이 회복된 뒤 새 실행에서 공시 목록과 관련 원문을 검증한다. 현재 최종 확정은 보류한다.
+- Reviewer · Reuters 최초 URL 열기: 최초 직접 열기는 도구 접근 오류. 같은 공식 도메인 검색 결과를 통해 원문을 다시 열어 성공했다. \| URL: https://www.reuters.com/world/asia-pacific/sk-hynix-conditions-new-us-factory-more-us-chip-equipment-exports-china-sources-2026-10-15/ \| 해결: 정상 공개 웹 도구 경로로 원문 검증 완료. 유료벽·차단 우회는 하지 않았다.
+
+금융 리서치 학습 및 개발 포트폴리오이며 개인투자 권유가 아닙니다.

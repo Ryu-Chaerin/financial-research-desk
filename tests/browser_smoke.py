@@ -116,6 +116,10 @@ class BrowserSmoke(unittest.TestCase):
         expect(self.page.locator("a[href^='report.html?id=']").first).to_be_visible()
         self.page.goto(self.base + "company.html")
         expect(self.page.locator("#report-list")).to_contain_text("SK하이닉스")
+        links = self.page.locator("#report-list a")
+        expect(links).to_have_count(len(self.listing))
+        links.last.click()
+        expect(self.page.locator(".report-id")).to_contain_text(self.listing[-1]["run_id"])
         self.go_report()
         body = self.page.locator("main")
         if self.real_report["research_status"] == "BLOCKED":
@@ -140,6 +144,38 @@ class BrowserSmoke(unittest.TestCase):
         source = self.page.locator(".source-link")
         expect(source).to_have_attribute("href", "https://example.com/test-only")
         self.assertIn("noopener", source.get_attribute("rel"))
+
+    def test_newer_draft_does_not_replace_latest_final(self):
+        reports = self.synthetic(older=True)
+        reports[0]["research_status"] = "PARTIAL"
+        reports[0]["review"]["status"] = "INSUFFICIENT_EVIDENCE"
+        # Re-register interception with a newer draft and an older confirmed report.
+        listing = {"reports": [{"run_id": r["run_id"], "company_name": r["company"]["name"],
+                    "executed_at": r["executed_at"], "summary": r["summary"],
+                    "research_status": r["research_status"], "review_status": r["review"]["status"],
+                    "path": f"data/reports/{r['run_id']}.json"} for r in reports]}
+        self.context.route("**/data/reports.json", lambda route: route.fulfill(json=listing))
+        for path in ["index.html", "company.html"]:
+            self.page.goto(self.base + path)
+            final = self.page.locator("#latest-final")
+            expect(final.locator("a")).to_have_attribute("href", "report.html?id=" + reports[1]["run_id"])
+            expect(self.page.locator("main")).to_contain_text("조사 초안")
+        self.go_report(reports[0]["run_id"])
+        expect(self.page.locator(".record-state")).to_contain_text("최종 확정 보류")
+
+    def test_no_final_when_all_runs_are_drafts(self):
+        for research, review in [("PARTIAL", "INSUFFICIENT_EVIDENCE"), ("COMPLETED", "REVISE"),
+                                 ("COMPLETED", None), ("BLOCKED", "INSUFFICIENT_EVIDENCE")]:
+            report = fixture_report()
+            report["research_status"] = research
+            report["review"]["status"] = review
+            if review is None:
+                report["review"]["execution_status"] = "NOT_RUN"
+            self.synthetic(report)
+            for path in ["index.html", "company.html"]:
+                self.page.goto(self.base + path)
+                expect(self.page.locator("#latest-final")).to_contain_text("아직 확정된 보고서가 없습니다")
+                expect(self.page.locator("#latest-final a")).to_have_count(0)
 
     def test_notes_persist_only_in_browser(self):
         self.go_report()
@@ -215,10 +251,9 @@ class BrowserSmoke(unittest.TestCase):
         expect(self.page.locator("#study-note")).to_have_count(0)
 
     def test_mobile_layouts(self):
-        self.synthetic()
         for width in [320, 390]:
             self.page.set_viewport_size({"width": width, "height": 844})
-            for path in ["index.html", "company.html", "report.html?id=synthetic-unit-test-only"]:
+            for path in ["index.html", "company.html", "report.html?id=" + self.real_id]:
                 with self.subTest(width=width, path=path):
                     self.page.goto(self.base + path)
                     if path.startswith("report"):

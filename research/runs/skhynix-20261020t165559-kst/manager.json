@@ -1,0 +1,15 @@
+{
+  "run_id": "skhynix-20261020t165559-kst",
+  "recorded_at": "2026-10-20T16:59:57+09:00",
+  "revision_count": 1,
+  "changes": [
+    "제목·요약에 Reuters 보도와 회사 반론 구분",
+    "조사 초안·최종 확정 보류 명시"
+  ],
+  "unresolved": [
+    "DART 기간 공시 미확인",
+    "핵심 IR 내용 미확인"
+  ],
+  "re_review_performed": false,
+  "finalization": "WITHHELD"
+}

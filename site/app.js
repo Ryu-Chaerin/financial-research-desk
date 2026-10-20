@@ -3,7 +3,7 @@
 (() => {
   const content = document.getElementById("content");
   const page = document.body.dataset.page;
-  const researchLabels = {COMPLETED: "조사 완료", PARTIAL: "일부 자료 확인", BLOCKED: "자료 접근 차단 · 조사 미완료"};
+  const researchLabels = {COMPLETED: "조사 완료", PARTIAL: "조사 초안 · 최종 확정 보류", BLOCKED: "자료 접근 차단 · 조사 미완료"};
   const reviewLabels = {PASS: "PASS · 검토 통과", REVISE: "REVISE · 수정 필요", INSUFFICIENT_EVIDENCE: "INSUFFICIENT_EVIDENCE · 근거 부족"};
   const roleLabels = {"Research Manager": "Research Manager", Researcher: "Researcher", Reviewer: "Reviewer", "Designer & Developer": "Designer & Developer"};
   const text = value => typeof value === "string" ? value : "";
@@ -68,6 +68,18 @@
     items.forEach(value => node.append(el("span", "", value)));
     return node;
   }
+  function isFinal(item) {
+    return item.research_status === "COMPLETED" && (item.review_status ?? item.review?.status) === "PASS";
+  }
+  function recordLabel(item) {
+    return isFinal(item) ? "확정 보고서" : item.research_status === "BLOCKED" ? "조사 차단 기록" : "조사 초안 · 최종 확정 보류";
+  }
+  function finalSection() {
+    const node = identifiedSection("latest-final", "최신 확정 보고서");
+    const latest = entries.find(isFinal);
+    node.append(latest ? summaryCard(latest, "최신 확정 보고서") : el("p", "empty-state", "아직 확정된 보고서가 없습니다. 조사 초안과 차단 기록은 최종 분석이 아닙니다."));
+    return node;
+  }
   function reportUrl(item) { return `report.html?id=${encodeURIComponent(item.run_id)}`; }
   function errorState(message) {
     content.replaceChildren();
@@ -117,7 +129,7 @@
   }
   function summaryCard(item, heading = "최근 실행 기록") {
     const node = el("article", "card");
-    node.append(append(el("div", "card-top"), el("span", "small-label", heading), badge(item.research_status)));
+    node.append(append(el("div", "card-top"), el("span", "small-label", heading), el("span", `badge ${isFinal(item) ? "good" : "warning"}`, recordLabel(item))));
     node.append(el("h3", "", item.company_name), el("p", "ticker", "000660 · SK hynix"), el("p", "report-summary", item.summary));
     node.append(metadata([`실행 ${formatted(item.executed_at)} KST`, item.review_status ? reviewLabels[item.review_status] : "검토 미실행"]));
     node.append(link("근거와 검토 기록 확인 →", reportUrl(item), "card-action"));
@@ -131,12 +143,13 @@
       content.append(el("div", "empty-state", "아직 저장된 리포트가 없습니다. 실제 공개자료 조사와 검토가 완료되면 이곳에서 확인할 수 있습니다."));
       return;
     }
+    content.append(finalSection());
     const latest = entries[0];
     const panel = append(el("aside", "card"), el("span", "small-label", "DESK OVERVIEW"), el("h3", "", "확인 가능한 기록"));
     for (const [label, value] of [["분석 대상", "SK하이닉스 1개 기업"], ["조사 범위", "실행 시점 기준 최근 7일"], ["보존된 실행", `${entries.length}회`], ["최근 검토", latest.review_status ? reviewLabels[latest.review_status] : "검토 미실행"]]) {
       panel.append(append(el("div", "stat-row"), el("span", "", label), el("strong", "", value)));
     }
-    content.append(append(el("div", "dashboard-grid"), summaryCard(latest), panel));
+    content.append(append(el("div", "dashboard-grid"), summaryCard(latest, "최근 실행 · " + recordLabel(latest)), panel));
   }
   function history() {
     const node = el("section", "history-section");
@@ -147,7 +160,7 @@
     list.id = "report-list";
     entries.forEach(item => {
       const row = el("article", "card history-item");
-      const date = append(el("div", "history-date"), el("p", "", `${formatted(item.executed_at)} KST`), badge(item.research_status));
+      const date = append(el("div", "history-date"), el("p", "", `${formatted(item.executed_at)} KST`), el("span", `badge ${isFinal(item) ? "good" : "warning"}`, recordLabel(item)));
       const description = append(el("div"), el("h3", "", `${item.company_name} · 공개자료 리서치`), el("p", "report-summary", item.summary));
       row.append(date, description, link("리포트 보기 →", reportUrl(item), "card-action"));
       list.append(row);
@@ -156,9 +169,10 @@
   }
   function company() {
     content.replaceChildren();
+    content.append(finalSection());
     if (entries.length) {
       const latest = entries[0];
-      content.append(summaryCard(latest, "LATEST RESEARCH RUN"));
+      content.append(summaryCard(latest, "최근 실행 · " + recordLabel(latest)));
       if (latest.research_status === "BLOCKED") content.append(append(el("div", "notice warning sub-section"), el("h2", "", "최신 조사 상태를 먼저 확인해 주세요"), el("p", "", "자료 접근이 차단되어 원문 조사가 완료되지 않았습니다. 중요한 사건이 없다는 뜻이 아니며, 새로운 분석이나 투자 판단의 근거로 사용할 수 없습니다.")));
     }
     content.append(history());
@@ -288,6 +302,7 @@
     const header = el("header", "report-heading");
     header.append(el("p", "eyebrow", "SK HYNIX · RESEARCH RECORD"), append(el("div", "status-line"), badge(report.research_status), badge(report.review.status, "review")), el("h1", "", report.topic), el("p", "page-intro", report.summary));
     header.append(metadata([`${report.company.name} · ${text(report.company.ticker)}`, `실행 ${formatted(report.executed_at)} KST`, `기준 시간대 ${report.timezone}`, `조사 기간 ${formatted(report.period.start)} ~ ${formatted(report.period.end)} KST`]));
+    header.append(el("p", "record-state", recordLabel(report)));
     header.append(el("p", "report-id", `실행 ID: ${report.run_id}`));
     const download = link("구조화된 JSON 보기 ↗", entry.path);
     download.target = "_blank";
@@ -296,7 +311,8 @@
     const body = el("div", "report-body");
     body.id = "report-content";
     if (report.research_status === "BLOCKED") body.append(append(el("div", "notice warning"), el("h2", "", "자료 접근 차단으로 실제 조사가 미완료되었습니다"), el("p", "", "이 기록은 분석 성공 보고서가 아닙니다. 공개 원문을 읽지 못했으므로 중요한 사건의 유무나 재무 영향을 판단할 수 없습니다. 접속 실패와 실제 검토 결과를 아래에서 확인하세요.")));
-    else if (report.research_status === "PARTIAL") body.append(append(el("div", "notice warning"), el("h2", "", "일부 자료만 확인한 리포트입니다"), el("p", "", "분석의 한계와 검토 지적 사항을 확인하고 부족한 근거를 검증된 사실로 받아들이지 마세요.")));
+    else if (report.research_status === "PARTIAL") body.append(append(el("div", "notice warning"), el("h2", "", "조사 초안이며 최종 확정을 보류합니다"), el("p", "", "분석의 한계와 검토 지적 사항을 확인하고 부족한 근거를 검증된 사실로 받아들이지 마세요.")));
+    if (report.research_status === "COMPLETED" && !isFinal(report)) body.append(el("p", "notice warning", "Reviewer 통과 전 조사 초안입니다. 최종 분석 확정을 보류합니다."));
     const limitations = identifiedSection("limitations", "판단의 한계와 다음 확인 항목");
     limitations.append(el("h3", "", "반대 근거 · 조사 한계"), bullets(report.limitations), el("h3", "sub-section", "추후 확인할 항목"), bullets(report.follow_up));
     body.append(eventsSection(report), reviewSection(report), sourcesSection(report), limitations, agentsSection(report), failuresSection(report), notesSection(report));

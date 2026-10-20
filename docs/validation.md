@@ -34,7 +34,9 @@
 
 ### GitHub 전달
 
-기존 초안 PR #1과 작업 브랜치를 사용한다. 커밋·전송 및 원격 상태의 실제 확인 결과는 아래 전달 기록에 적는다.
+기존 작업 브랜치 `codex/financial-research-desk-v1`에 구현 커밋 `2b3b0137f3f8396bd608346c47387347d09e7b6f`를 만들고 origin으로 전송했다. `gh pr view`의 headRefOid와 로컬 HEAD 일치를 확인했다. [초안 PR #1](https://github.com/Ryu-Chaerin/financial-research-desk/pull/1)의 제목·설명을 최신 구현과 조사 한계로 갱신했으며 상태는 OPEN / isDraft=true다. main 병합·공개 배포는 수행하지 않았다. 이 전달 증거 문서는 후속 문서 커밋으로 보존한다.
+
+브라우저에서는 PR의 Files changed를 클릭하거나, [새 조사 초안 Markdown](https://github.com/Ryu-Chaerin/financial-research-desk/blob/codex/financial-research-desk-v1/research/reports/skhynix-20261020t165559-kst/report.md)을 열면 된다. 공개 웹사이트는 활성화하지 않았으며 배포 성공을 주장하지 않는다.
 
 ---
 

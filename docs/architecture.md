@@ -48,3 +48,11 @@ PARTIAL은 실제 자료를 일부 확인한 조사 초안이며 최종 확정�
 ## 배포와 비용
 
 서버·DB·LLM API가 필요하지 않다. 배포는 별도 승인 이후 공개 저장소의 GitHub Pages 무료 기능으로 진행한다. 현재는 활성 워크플로 없이 수동 배포 템플릿만 제공한다. 설치 상태 스냅샷과 환경 설정 저장은 웹사이트 공개 배포와 다른 절차다.
+
+## 기업 기본 분석 저장과 재사용
+
+기본 분석은 `research/baselines/<run_id>/report.json`과 Markdown으로 불변 보관한다. 기존 보고서 계약에 선택필드 `report_kind`를 추가하며 생략하면 WEEKLY, 기본 분석은 BASELINE이다. BASELINE의 period는 접근한 본문 자료의 보고기간이고168시간·실행시각 일치 규칙에서 제외한다. 주간 보고서 규칙은 유지한다.
+
+BASELINE은 baseline_coverage에 연간·중간자료 출처 ID와 freshness_verified를 기록한다. 출처에는 source_type(ORIGINAL/REPOST), original_verified, access_scope(FULL_TEXT/EXCERPTS_READ/METADATA_ONLY), reporting_period를 추가한다. 기본 자료의 access_status는 ACCESSED로 접근 성공만 나타내고 원본 확인 여부는 별도 필드로 판단한다. original_verified는 공식 보고서 본문 확인만 뜻한다. 공식 목차·색인에는 false를 기록하고 내용 검증과 구분한다. 보고기간이 확인되지 않으면 문자열로 미확인 사유를 표시한다. COMPLETED 상태를 허용하려면 연간·중간자료, 최신성, 모든 인용 출처의 공식 본문 확인이 필요하다.
+
+빌드는 기본 분석을 별도 data/baselines.json 목록과 data/baselines/<run_id>.json·md로 내보낸다. 주간 data/reports.json과 섞지 않는다. 기업 화면에 기본 자료의 최근 수집 기록과 과거 버전을 표시하고 baseline.html에서 기존 출처·검토·메모 화면을 재사용한다. 기본 목록 오류가 나도 주간 이력은 유지한다. 주간 보고서의 기본 자료 링크는 현재 공용 참고자료로 이동하며 과거 실행에서 이미 읽었다는 뜻이 아니다.

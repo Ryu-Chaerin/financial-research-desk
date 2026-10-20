@@ -80,7 +80,7 @@
     node.append(latest ? summaryCard(latest, "최신 확정 보고서") : el("p", "empty-state", "아직 확정된 보고서가 없습니다. 조사 초안과 차단 기록은 최종 분석이 아닙니다."));
     return node;
   }
-  function reportUrl(item) { return `report.html?id=${encodeURIComponent(item.run_id)}`; }
+  function reportUrl(item) { return `${item.report_kind === "BASELINE" ? "baseline" : "report"}.html?id=${encodeURIComponent(item.run_id)}`; }
   function errorState(message) {
     content.replaceChildren();
     const box = append(el("section", "error-panel"), el("p", "eyebrow", "RESEARCH RECORD UNAVAILABLE"), el("h2", "", "기록을 표시할 수 없습니다"), el("p", "", message), el("p", "muted", "불러오지 못한 내용을 분석 결과로 대신 표시하지 않습니다. 잠시 후 다시 시도하거나 리포트 목록을 확인해 주세요."));
@@ -101,11 +101,11 @@
       return await response.json();
     } finally { clearTimeout(timer); }
   }
-  function validateIndex(index) {
+  function validateIndex(index, collection = "reports") {
     if (!index || !Array.isArray(index.reports)) throw new Error("INDEX");
     const ids = new Set();
     return index.reports.map(item => {
-      if (!item || !slugPattern.test(item.run_id) || ids.has(item.run_id) || typeof item.company_name !== "string" || typeof item.summary !== "string" || !researchLabels[item.research_status] || !Number.isFinite(Date.parse(item.executed_at)) || item.path !== `data/reports/${item.run_id}.json`) throw new Error("INDEX");
+      if (!item || !slugPattern.test(item.run_id) || ids.has(item.run_id) || typeof item.company_name !== "string" || typeof item.summary !== "string" || !researchLabels[item.research_status] || !Number.isFinite(Date.parse(item.executed_at)) || item.path !== `data/${collection}/${item.run_id}.json` || (collection === "baselines" && item.report_kind !== "BASELINE")) throw new Error("INDEX");
       ids.add(item.run_id);
       return item;
     }).sort((a, b) => Date.parse(b.executed_at) - Date.parse(a.executed_at));
@@ -125,6 +125,7 @@
       event.impact_channels.forEach(item => { if (!item || !Array.isArray(item.conditions)) throw new Error("REPORT"); });
     });
     for (const key of ["sources", "agents", "failures"]) { if (report[key].some(item => !item || typeof item !== "object")) throw new Error("REPORT"); }
+    if (page === "baseline" && (report.report_kind !== "BASELINE" || !report.baseline_coverage || typeof report.baseline_coverage.freshness_verified !== "boolean" || report.sources.some(source => !["ORIGINAL", "REPOST"].includes(source.source_type) || !["FULL_TEXT", "EXCERPTS_READ", "METADATA_ONLY"].includes(source.access_scope) || typeof source.original_verified !== "boolean"))) throw new Error("REPORT");
     return report;
   }
   function summaryCard(item, heading = "최근 실행 기록") {
@@ -167,6 +168,24 @@
     });
     return append(node, list);
   }
+  async function baselineOverview() {
+    const box = document.getElementById("baseline-overview");
+    if (!box) return;
+    box.replaceChildren(el("h2", "", "기업 기본 분석 · 사업보고서와 후속 보고서"));
+    try {
+      const records = validateIndex(await fetchJson("data/baselines.json"), "baselines");
+      box.append(el("p", "muted", "최근7일 뉴스와 별도로 보관하는 기본 자료입니다. 최신 수집 기록이 최신 공시의 확인 완료를 뜻하지는 않습니다."));
+      if (!records.length) return box.append(el("p", "empty-state", "아직 기본 분석 기록이 없습니다."));
+      box.append(summaryCard(records[0], "기업 기본 분석 · 최근 수집 기록"));
+      if (records.length > 1) {
+        const archive = el("ul");
+        records.slice(1).forEach(item => archive.append(append(el("li"), link(formatted(item.executed_at) + " · " + recordLabel(item), reportUrl(item)))));
+        box.append(archive);
+      }
+    } catch {
+      box.append(el("p", "notice warning", "기업 기본 자료를 불러오지 못했습니다. 아래 주간 조사 이력은 계속 확인할 수 있습니다."));
+    }
+  }
   function company() {
     content.replaceChildren();
     content.append(finalSection());
@@ -188,7 +207,7 @@
     return block;
   }
   function eventsSection(report) {
-    const node = identifiedSection("events", "주요 사건과 기업 영향");
+    const node = identifiedSection("events", report.report_kind === "BASELINE" ? "기업 기본 분석과 영향 경로" : "주요 사건과 기업 영향");
     if (!report.events.length) {
       node.append(el("div", "empty-state", report.research_status === "BLOCKED" ? "원문을 확인하지 못해 사건과 재무 영향을 작성하지 않았습니다. 이는 최근 중요한 사건이 없었다는 결론이 아닙니다." : "이번 실행에서 보고할 사건이 기록되지 않았습니다. 조사 범위와 검토의 한계를 함께 확인해 주세요."));
       return node;
@@ -240,7 +259,8 @@
     report.sources.forEach(source => {
       const item = el("li", "source-item");
       item.id = `source-${encodeURIComponent(source.id)}`;
-      item.append(el("span", "small-label", `SOURCE ${text(source.id)}`), el("h3", "", text(source.title)), external(text(source.url), source.url, "source-url source-link"), el("p", "", text(source.evidence)), metadata([`게시일 ${source.published_at ? formatted(source.published_at, false) : "미확인"}`, `조회 ${formatted(source.accessed_at)} KST`, source.access_status === "VERIFIED" ? "원문 확인" : "확인 상태 미상"]));
+      if (report.report_kind === "BASELINE") item.append(el("p", "notice warning", source.access_scope === "METADATA_ONLY" ? "공식 접수정보·목차만 확인 · 재무 본문 미확인" : source.source_type === "REPOST" ? "외부 재게시본 · 원본 대조 미완료" : "공식 본문 확인"), el("p", "muted", `자료의 보고기간: ${text(source.reporting_period)}`));
+      item.append(el("span", "small-label", `SOURCE ${text(source.id)}`), el("h3", "", text(source.title)), external(text(source.url), source.url, "source-url source-link"), el("p", "", text(source.evidence)), metadata([`게시일 ${source.published_at ? formatted(source.published_at, false) : "미확인"}`, `조회 ${formatted(source.accessed_at)} KST`, source.access_scope === "METADATA_ONLY" ? "접수정보·목차 확인" : source.source_type === "REPOST" ? "재게시 일부 본문 확인 · 원본 대조 미완료" : source.access_status === "VERIFIED" ? "원문 확인" : "확인 상태 미상"]));
       list.append(item);
     });
     return append(node, list);
@@ -303,11 +323,12 @@
     header.append(el("p", "eyebrow", "SK HYNIX · RESEARCH RECORD"), append(el("div", "status-line"), badge(report.research_status), badge(report.review.status, "review")), el("h1", "", report.topic), el("p", "page-intro", report.summary));
     header.append(metadata([`${report.company.name} · ${text(report.company.ticker)}`, `실행 ${formatted(report.executed_at)} KST`, `기준 시간대 ${report.timezone}`, `조사 기간 ${formatted(report.period.start)} ~ ${formatted(report.period.end)} KST`]));
     header.append(el("p", "record-state", recordLabel(report)));
+    if (report.report_kind === "BASELINE") header.append(el("p", "notice warning", "기업 기본 자료 · 최근7일 뉴스와 별도입니다. 위 기간은 자료의 보고기간입니다. 최신성·정정 확인: " + (report.baseline_coverage.freshness_verified ? "확인" : "미완료")));
     header.append(el("p", "report-id", `실행 ID: ${report.run_id}`));
     const download = link("구조화된 JSON 보기 ↗", entry.path);
     download.target = "_blank";
     download.rel = "noopener";
-    header.append(append(el("div", "download-links"), download, link("과거 리포트 목록", "company.html#history")));
+    header.append(append(el("div", "download-links"), download, link("과거 리포트 목록", "company.html#history"), link("기업 기본 자료 확인", "company.html#baseline-overview")));
     const body = el("div", "report-body");
     body.id = "report-content";
     if (report.research_status === "BLOCKED") body.append(append(el("div", "notice warning"), el("h2", "", "자료 접근 차단으로 실제 조사가 미완료되었습니다"), el("p", "", "이 기록은 분석 성공 보고서가 아닙니다. 공개 원문을 읽지 못했으므로 중요한 사건의 유무나 재무 영향을 판단할 수 없습니다. 접속 실패와 실제 검토 결과를 아래에서 확인하세요.")));
@@ -330,10 +351,12 @@
     loading.setAttribute("role", "status");
     content.replaceChildren(loading);
     try {
-      entries = validateIndex(await fetchJson("data/reports.json"));
+      const collection = page === "baseline" ? "baselines" : "reports";
+      entries = validateIndex(await fetchJson(`data/${collection}.json`), collection);
       if (page === "home") return home();
       if (page === "company") {
         company();
+        baselineOverview();
         if (location.hash === "#history") document.getElementById("history")?.scrollIntoView();
         return;
       }

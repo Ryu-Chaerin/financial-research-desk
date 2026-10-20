@@ -250,6 +250,36 @@ class BrowserSmoke(unittest.TestCase):
         expect(self.page.locator("nav")).to_be_visible()
         expect(self.page.locator("#study-note")).to_have_count(0)
 
+    def test_real_baseline_sources_and_company_link(self):
+        listing = json.loads((ROOT / "dist/data/baselines.json").read_text())["reports"]
+        self.assertTrue(listing, "Expected a real baseline record")
+        baseline = json.loads((ROOT / "dist" / listing[0]["path"]).read_text())
+        self.page.goto(self.base + "company.html")
+        self.page.locator("#baseline-overview a[href^='baseline.html']").first.click()
+        expect(self.page.locator("#study-note")).to_be_visible()
+        expect(self.page.locator(".report-id")).to_contain_text(baseline["run_id"])
+        expect(self.page.locator(".source-link")).to_have_count(len(baseline["sources"]))
+        expect(self.page.locator("main")).to_contain_text("원본 대조 미완료")
+        expect(self.page.locator("main")).to_contain_text("접수정보·목차만 확인")
+        expect(self.page.locator("main")).to_contain_text("최신성·정정 확인: 미완료")
+        expect(self.page.locator("main")).to_contain_text("INSUFFICIENT_EVIDENCE")
+        for width in [320, 390]:
+            self.page.set_viewport_size({"width": width, "height": 844})
+            self.assertTrue(self.page.evaluate("document.documentElement.scrollWidth <= innerWidth + 1"))
+
+    def test_baseline_fetch_error_does_not_hide_weekly_history(self):
+        self.context.route("**/data/baselines.json", lambda route: route.fulfill(status=404, body="missing"))
+        self.page.goto(self.base + "company.html")
+        expect(self.page.locator("#baseline-overview")).to_contain_text("불러오지 못")
+        expect(self.page.locator("#report-list a")).to_have_count(len(self.listing))
+
+    def test_broken_baseline_report_is_friendly_error(self):
+        listing = json.loads((ROOT / "dist/data/baselines.json").read_text())["reports"]
+        item = listing[0]
+        self.context.route("**/" + item["path"], lambda route: route.fulfill(json={"run_id": item["run_id"]}))
+        self.page.goto(self.base + "baseline.html?id=" + item["run_id"])
+        self.assert_friendly_error()
+
     def test_mobile_layouts(self):
         for width in [320, 390]:
             self.page.set_viewport_size({"width": width, "height": 844})

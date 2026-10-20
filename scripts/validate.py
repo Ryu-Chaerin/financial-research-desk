@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main(paths: list[str] | None = None) -> int:
     paths = sys.argv[1:] if paths is None else paths
-    selected = [Path(p) for p in paths] if paths else sorted((ROOT / "research" / "reports").glob("*/report.json"))
+    selected = [Path(p) for p in paths] if paths else sorted((ROOT / "research" / "reports").glob("*/report.json")) + sorted((ROOT / "research" / "baselines").glob("*/report.json"))
     if not selected:
         print("FAIL: No report.json files found", file=sys.stderr)
         return 1

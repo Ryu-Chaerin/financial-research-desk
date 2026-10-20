@@ -40,6 +40,74 @@ def fixture_report():
     }
 
 
+def fixture_baseline():
+    r = fixture_report()
+    r["run_id"] = "synthetic-baseline-test-only"
+    r["report_kind"] = "BASELINE"
+    r["research_status"] = "PARTIAL"
+    r["period"] = {"start": "2025-01-01T00:00:00+09:00", "end": "2025-12-31T23:59:59+09:00"}
+    r["baseline_coverage"] = {"annual_source_id": "test-source", "interim_source_id": None, "freshness_verified": False}
+    r["sources"][0].update(source_type="REPOST", access_status="ACCESSED", original_verified=False, reporting_period="2025-01-01 ~ 2025-12-31", access_scope="FULL_TEXT")
+    r["review"]["status"] = "INSUFFICIENT_EVIDENCE"
+    return r
+
+
+class BaselineTests(unittest.TestCase):
+    def test_background_period_is_separate_from_weekly_window(self):
+        r = fixture_baseline()
+        self.assertEqual(validate_report(r), [])
+        r.pop("report_kind")
+        self.assertTrue(any("168 hours" in e for e in validate_report(r)))
+
+    def test_repost_cannot_become_final_or_claim_original_verification(self):
+        r = fixture_baseline()
+        r["research_status"] = "COMPLETED"
+        r["baseline_coverage"].update(interim_source_id="test-source", freshness_verified=True)
+        self.assertTrue(any("verified originals" in e for e in validate_report(r)))
+        r["sources"][0]["original_verified"] = True
+        self.assertTrue(any("REPOST remains unverified" in e for e in validate_report(r)))
+
+    def test_metadata_cannot_complete_baseline(self):
+        r = fixture_baseline()
+        r["research_status"] = "COMPLETED"
+        r["baseline_coverage"].update(interim_source_id="test-source", freshness_verified=True)
+        r["sources"][0].update(source_type="ORIGINAL", original_verified=True, access_scope="METADATA_ONLY")
+        self.assertTrue(any("verified originals" in e for e in validate_report(r)))
+        r["research_status"] = "PARTIAL"
+        r["sources"][0]["original_verified"] = False
+        self.assertEqual(validate_report(r), [])
+        self.assertIn("목차만 확인", render_markdown(r))
+
+    def test_missing_coverage_and_unsafe_provenance_are_rejected(self):
+        r = fixture_baseline()
+        r["baseline_coverage"]["annual_source_id"] = "missing"
+        r["sources"][0]["access_scope"] = "UNKNOWN"
+        self.assertTrue(validate_report(r))
+        del r["baseline_coverage"]
+        self.assertTrue(validate_report(r))
+
+    def test_baselines_build_into_separate_collection_and_preserve_history(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "site").mkdir()
+            (root / "site/index.html").write_text("test only")
+            save_report(fixture_report(), root / "research/reports")
+            r = fixture_baseline()
+            folder = save_report(r, root / "research/baselines")
+            before = (folder / "report.json").read_bytes()
+            output = build(root)
+            weekly = json.loads((output / "data/reports.json").read_text())["reports"]
+            baseline = json.loads((output / "data/baselines.json").read_text())["reports"]
+            self.assertEqual(len(weekly), 1)
+            self.assertEqual(len(baseline), 1)
+            self.assertEqual(baseline[0]["report_kind"], "BASELINE")
+            self.assertTrue((output / baseline[0]["path"]).is_file())
+            self.assertIn("외부 재게시", (folder / "report.md").read_text())
+            with self.assertRaises(FileExistsError):
+                save_report(r, root / "research/baselines")
+            self.assertEqual(before, (folder / "report.json").read_bytes())
+
+
 class ContractTests(unittest.TestCase):
     def test_valid_synthetic_complete_report(self):
         self.assertEqual(validate_report(fixture_report()), [])

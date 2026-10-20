@@ -1,0 +1,12 @@
+{
+  "run_id": "skhynix-baseline-20261020t170559-kst",
+  "recorded_at": "2026-10-20T17:12:15+09:00",
+  "revision_count": 1,
+  "changes": [
+    "공식 메타데이터 original_verified를 false로 보정: 원본 본문 확인만 의미하도록 정의 통일",
+    "생산설비 사실·근거에서 미확인 구체 항목 제외",
+    "수치·최신성·정정 확인 미완료 유지"
+  ],
+  "re_review_performed": false,
+  "finalization": "WITHHELD"
+}

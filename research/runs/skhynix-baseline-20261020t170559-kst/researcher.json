@@ -1,0 +1,274 @@
+{
+  "run_id": "skhynix-baseline-20261020t170559-kst",
+  "agent_id": "/root/baseline_researcher",
+  "role": "Researcher",
+  "started_at": "2026-10-20T17:06:27+09:00",
+  "completed_at": "2026-10-20T17:08:43+09:00",
+  "timestamp_note": "시작은 최초 시계 확인, 완료는 파일 최종 저장 시각이다. accessed_at은 마지막 웹조회 묶음 직후 시계 확인이다. ORIGINAL의 original_verified=true는 해당 공식 목차/색인 페이지의 메타데이터만 확인했다는 뜻이며 보고서 본문·숫자 검증이 아니다.",
+  "research_status": "PARTIAL",
+  "recommended_review_status": "INSUFFICIENT_EVIDENCE",
+  "summary": "사업보고서 재게시본의 기본 사업 설명을 읽고 공식 연간·반기·분기 XBRL 목차를 찾았다. DART 보고서 원문·표·정정 및 최신성 확인이 남아 기업 기본 분석 초안으로만 사용한다.",
+  "sources": [
+    {
+      "id": "annual2025-repost",
+      "title": "SK hynix Inc. — Annual Report 2025 (외부 재게시본)",
+      "url": "https://financialfilings.com/filings/sk-hynix-inc/annual-report/2026/32962136/",
+      "published_at": "2026-03-17",
+      "reporting_period": {
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "source_type": "REPOST",
+      "original_verified": false,
+      "evidence": "표지의 기간·제출일, 사업개요, HBM/eSSD 설명, 생산설비표·경쟁요소를 읽었다. 표 일부는 수치가 붙어 추출되며 DART 원본 대조는 실패했다.",
+      "accessed_at": "2026-10-20T17:07:17+09:00",
+      "access_scope": "EXCERPTS_READ"
+    },
+    {
+      "id": "annual2025-opendart-index",
+      "title": "SK hynix / Annual Report / 2026.03.17 — OPENDART XBRL 목차",
+      "url": "https://opendart.fss.or.kr/xbrl/viewer/main.do?lang=en&rcpNo=20260317000635",
+      "published_at": "2026-03-17",
+      "reporting_period": null,
+      "source_type": "ORIGINAL",
+      "original_verified": true,
+      "evidence": "공식 뷰어의 기업명·Annual Report·재무제표 및 주석 목차만 읽었다. 수치표는 추출되지 않았고 뷰어 자체도 기존 DART 보고서와 차이가 있을 수 있다고 안내한다.",
+      "accessed_at": "2026-10-20T17:07:17+09:00",
+      "access_scope": "METADATA_ONLY"
+    },
+    {
+      "id": "half2026-opendart-index",
+      "title": "SK hynix / Half Year Report / 2026.08.14 — OPENDART XBRL 목차",
+      "url": "https://opendart.fss.or.kr/xbrl/viewer/main.do?lang=en&rcpNo=20260814003509",
+      "published_at": "2026-08-14",
+      "reporting_period": null,
+      "source_type": "ORIGINAL",
+      "original_verified": true,
+      "evidence": "공식 뷰어에서 기업명·Half Year Report와 현금흐름·재고·유형자산·차입금 등 목차만 읽었다. 실제 표·주석 본문은 확인하지 못했다.",
+      "accessed_at": "2026-10-20T17:07:17+09:00",
+      "access_scope": "METADATA_ONLY"
+    },
+    {
+      "id": "q1-2026-opendart-index",
+      "title": "SK hynix / First Quarterly Report / 2026.05.15 — OPENDART XBRL 목차",
+      "url": "https://opendart.fss.or.kr/xbrl/viewer/main.do?lang=en&rcpNo=20260515002287",
+      "published_at": "2026-05-15",
+      "reporting_period": null,
+      "source_type": "ORIGINAL",
+      "original_verified": true,
+      "evidence": "공식 뷰어에서 기업명·First Quarterly Report와 주석 목차만 읽었다. 수치표·정정 여부·보고대상 정확한 일자는 확인하지 못했다.",
+      "accessed_at": "2026-10-20T17:07:17+09:00",
+      "access_scope": "METADATA_ONLY"
+    },
+    {
+      "id": "sec-half2026-index",
+      "title": "SEC EDGAR Filing Detail — SK hynix Form 6-K, 0001193125-26-354777",
+      "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526354777/0001193125-26-354777-index.html",
+      "published_at": "2026-08-18",
+      "reporting_period": null,
+      "source_type": "ORIGINAL",
+      "original_verified": true,
+      "evidence": "공식 색인의 회사·제출일·6-K·첨부 링크만 읽었다. 표기 Period of Report 2026-08-18을 반기 재무제표 기간으로 쓰지 않는다. 첨부본문은 크기 제한으로 미확인이다.",
+      "accessed_at": "2026-10-20T17:07:17+09:00",
+      "access_scope": "METADATA_ONLY"
+    }
+  ],
+  "facts": [
+    {
+      "text": "재게시 사업보고서는 DRAM·NAND·MCP를 주력 제품으로 설명한다.",
+      "source_ids": [
+        "annual2025-repost"
+      ]
+    },
+    {
+      "text": "재게시본은 HBM·서버 DDR5와 기업용 SSD를 주요 사업 설명에 포함한다.",
+      "source_ids": [
+        "annual2025-repost"
+      ]
+    },
+    {
+      "text": "재게시본에는 기계장치·건설중인자산·감가상각을 포함한 생산설비 내역과 기술·원가·투자능력 관련 경쟁요소가 있다.",
+      "source_ids": [
+        "annual2025-repost"
+      ]
+    },
+    {
+      "text": "공식 OPENDART에서 연간·반기·1분기 보고서 제목과 재무제표 목차를 확인했지만 수치표는 읽지 못했다.",
+      "source_ids": [
+        "annual2025-opendart-index",
+        "half2026-opendart-index",
+        "q1-2026-opendart-index"
+      ]
+    }
+  ],
+  "interpretations": [
+    {
+      "area": "매출",
+      "text": "제품 구성과 고객 채택을 함께 점검해야 한다. 기술 소개를 매출 확정으로 볼 수 없다.",
+      "source_ids": [
+        "annual2025-repost"
+      ]
+    },
+    {
+      "area": "수익성",
+      "text": "고부가 제품 판매가 늘어도 원가·수율·개발비를 충당해야 이익 개선으로 이어진다.",
+      "source_ids": [
+        "annual2025-repost"
+      ]
+    },
+    {
+      "area": "현금흐름",
+      "text": "영업현금 유입과 투자 지출을 함께 비교해야 한다. 현재 추출본만으로 현금 여력이 충분하다고 판단하지 않는다.",
+      "source_ids": [
+        "annual2025-repost"
+      ]
+    },
+    {
+      "area": "설비투자",
+      "text": "공장·장비 투자는 수요와 양산 일정에 맞아야 한다. 자산 취득과 현금 지출은 같다고 가정하지 않는다.",
+      "source_ids": [
+        "annual2025-repost"
+      ]
+    },
+    {
+      "area": "위험요인",
+      "text": "재게시본만으로 최신 사업 위험을 확정하지 않는다. 원가·수요·환율과 실제 계약·허가를 후속 확인한다.",
+      "source_ids": [
+        "annual2025-repost"
+      ]
+    }
+  ],
+  "available_documents": [
+    {
+      "kind": "ANNUAL",
+      "label": "2025년 사업보고서 재게시본",
+      "source_ids": [
+        "annual2025-repost"
+      ],
+      "status": "REPOST_READ_ORIGINAL_UNVERIFIED"
+    },
+    {
+      "kind": "ANNUAL",
+      "label": "공식 연간 XBRL 뷰어",
+      "source_ids": [
+        "annual2025-opendart-index"
+      ],
+      "status": "METADATA_ONLY"
+    },
+    {
+      "kind": "HALF_YEAR",
+      "label": "공식2026.08.14 반기 XBRL 뷰어",
+      "source_ids": [
+        "half2026-opendart-index"
+      ],
+      "status": "METADATA_ONLY"
+    },
+    {
+      "kind": "QUARTERLY",
+      "label": "공식2026.05.15 1분기 XBRL 뷰어",
+      "source_ids": [
+        "q1-2026-opendart-index"
+      ],
+      "status": "METADATA_ONLY"
+    },
+    {
+      "kind": "INTERIM_REFERENCE",
+      "label": "SEC6-K 제출 색인",
+      "source_ids": [
+        "sec-half2026-index"
+      ],
+      "status": "METADATA_ONLY"
+    }
+  ],
+  "missing_documents": [
+    "DART2025 사업보고서 원문과 재게시본 일치·정정 여부",
+    "2026 반기·분기보고서 실제 수치표와 주석 본문",
+    "현재 기준 최종 정정 및 가장 최근 공시를 확인할 전체 목록",
+    "연결 영업현금흐름·유형자산 취득 현금지출·재고·차입금 수치 대조"
+  ],
+  "limitations": [
+    "외부 재게시본은 DART 원본과 대조하지 못했다. 추출표 일부의 열·숫자가 붙어 있어 숫자를 확정값으로 저장하지 않았다.",
+    "공식 OPENDART는 제목/목차에 접근했지만 기존 DART 사업보고서 본문 확인 성공과 다르다.",
+    "SEC색인은 열렸으나 첨부본문을 도구 크기 제한으로 읽지 못했다. 한국어 보고서와 동일하다고 판단하지 않는다.",
+    "중간보고서 목차를 발견했을 뿐 최신 보고서·정정 여부를 완전히 확인하지 못했다.",
+    "이 기본 분석은 과거 보고서에 기반한 배경 초안이며 최근7일 신규 사건이나 검증 완료 분석이 아니다."
+  ],
+  "follow_up": [
+    "DART 개별 접수번호20260317000635의 본문과 정정 여부 확인",
+    "연간 재게시본을 공식 원본의 사업·재무·주석과 대조",
+    "반기/분기 원문에서 보고기간·연결기준·현금흐름·설비투자·재고·차입금 확인",
+    "공식목록 기준 가장 최근 보고서 여부 확인 후 새 baseline 버전 추가",
+    "주간 뉴스는 확인된 기본 사업·재무구조와 연결하되 배경과 새 변화 분리"
+  ],
+  "failures": [
+    {
+      "stage": "Researcher · DART 홈",
+      "url": "https://dart.fss.or.kr/",
+      "reason": "웹 조회 도구502 Bad Gateway",
+      "resolution": "정상 공개 경로 회복 후 원문 확인. API키 부재로 단정하지 않는다."
+    },
+    {
+      "stage": "Researcher · DART 사업보고서 개별 원문",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260317000635",
+      "reason": "웹 조회 도구502 Bad Gateway",
+      "resolution": "개별보고서·정정 여부 재확인 필요"
+    },
+    {
+      "stage": "Researcher · 공식 IR 목록/실적",
+      "url": "https://www.skhynix.com/ir/UI-FR-IR06/",
+      "reason": "실적영역 날짜/본문 미추출. 공시목록도0/0 껍데기만 추출됐다.",
+      "resolution": "실제 내용 확인 가능한 공식 첨부/목록 경로에서 대조"
+    },
+    {
+      "stage": "Researcher · SEC6-K 실제 첨부",
+      "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526354777/d147827d6k.htm",
+      "reason": "직접 열기 Internal Error; 공식색인 링크로 열기400 Content length is too large: 4194305+",
+      "resolution": "도구가 처리 가능한 공식 문서 분할 경로가 확인되면 읽는다. 이번에는 본문 미확인으로 남긴다."
+    }
+  ],
+  "access_log": [
+    {
+      "tool": "mcp__codex_apps__search_service_web_run",
+      "batch": 1,
+      "action": "공식IR/실적/DART홈 열기, 사업보고서·SEC 검색",
+      "result": "DART502, IR껍데기, OPENDART접수번호 탐색"
+    },
+    {
+      "tool": "mcp__codex_apps__search_service_web_run",
+      "batch": 2,
+      "action": "DART 개별원문·연간OPENDART·재게시본·SEC첨부 열기",
+      "result": "DART502, 공식XBRL목차·재게시본문 성공, SEC본문 오류"
+    },
+    {
+      "tool": "mcp__codex_apps__search_service_web_run",
+      "batch": 3,
+      "action": "재게시본문 HBM·현금/투자 탐색, SEC색인 및 반기뷰어 검색",
+      "result": "사업설명 확인·반기목차 후보 발견·SEC색인 성공"
+    },
+    {
+      "tool": "mcp__codex_apps__search_service_web_run",
+      "batch": 4,
+      "action": "공식반기목차와 재게시 위험/현금 관련 탐색",
+      "result": "반기목차 확인, 표 일부 추출변형으로 수치 미채택"
+    },
+    {
+      "tool": "mcp__codex_apps__search_service_web_run",
+      "batch": 5,
+      "action": "재게시 사업/설비 영역과 공식색인 본문 확인, 분기뷰어 검색",
+      "result": "기본 설명 확인, 1분기목차 발견"
+    },
+    {
+      "tool": "mcp__codex_apps__search_service_web_run",
+      "batch": 6,
+      "action": "공식SEC색인의 실제 첨부 클릭·공식1분기뷰어 열기",
+      "result": "SEC본문4MiB초과 오류 확인, 1분기목차 확인. 추가 반복조사 종료"
+    }
+  ],
+  "actual_task_summary": "실제 Researcher로 공개 웹 도구6회(마지막1회는 SEC색인 실제첨부·분기목차 확인) 수행. 원문과 재게시·목차를 구분해 기본 분석 초안을 작성했다. 외부LLM/유료API/가입/권한확장/원문전체복제 없이 조사 종료. Reviewer 검증과 최종 저장은 Manager 후속 업무다.",
+  "baseline_coverage": {
+    "annual_original_body_verified": false,
+    "interim_original_body_verified": false,
+    "repost_compared_to_original": false,
+    "freshness_verified": false
+  }
+}

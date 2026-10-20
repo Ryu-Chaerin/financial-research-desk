@@ -99,16 +99,21 @@ def validate_report(report: object) -> list[str]:
     company = obj(r.get("company"), "company", ["name", "ticker"])
     if company.get("name") != "SK하이닉스" or company.get("ticker") != "000660":
         err("company", "v1 supports only SK하이닉스 (000660)")
+    kind = r.get("report_kind", "WEEKLY")
+    choice(kind, "report_kind", {"WEEKLY", "BASELINE"})
+    baseline = kind == "BASELINE"
     executed = timestamp(r.get("executed_at"), "executed_at")
     if r.get("timezone") != "Asia/Seoul":
         err("timezone", "must be Asia/Seoul")
     period = obj(r.get("period"), "period", ["start", "end"])
     start = timestamp(period.get("start"), "period.start")
     end = timestamp(period.get("end"), "period.end")
-    if start and end and end - start != timedelta(hours=168):
+    if not baseline and start and end and end - start != timedelta(hours=168):
         err("period", "must cover exactly 168 hours")
-    if executed and end and executed != end:
+    if not baseline and executed and end and executed != end:
         err("period.end", "must equal executed_at")
+    if baseline and start and end and executed and not start <= end <= executed:
+        err("period", "baseline reporting period must end no later than execution")
     for key in ["topic", "summary"]:
         text(r.get(key), key)
     choice(r.get("research_status"), "research_status", {"COMPLETED", "PARTIAL", "BLOCKED"})
@@ -127,10 +132,33 @@ def validate_report(report: object) -> list[str]:
             if sid in source_ids:
                 err(f"{p}.id", "duplicate source id")
             source_ids.add(sid)
+        if baseline:
+            choice(s.get("source_type"), f"{p}.source_type", {"ORIGINAL", "REPOST"})
+            if type(s.get("original_verified")) is not bool:
+                err(f"{p}.original_verified", "must be a boolean")
+            if s.get("original_verified") is True and (s.get("source_type") != "ORIGINAL" or s.get("access_scope") != "FULL_TEXT"):
+                err(p, "original_verified requires official full body verification")
+            if s.get("source_type") == "REPOST" and s.get("original_verified") is not False:
+                err(p, "REPOST remains unverified against original in v1")
+            choice(s.get("access_scope"), f"{p}.access_scope", {"FULL_TEXT", "EXCERPTS_READ", "METADATA_ONLY"})
+            text(s.get("reporting_period"), f"{p}.reporting_period")
         day(s.get("published_at"), f"{p}.published_at")
         timestamp(s.get("accessed_at"), f"{p}.accessed_at")
         url(s.get("url"), f"{p}.url")
-        choice(s.get("access_status"), f"{p}.access_status", {"VERIFIED"})
+        choice(s.get("access_status"), f"{p}.access_status", {"ACCESSED"} if baseline else {"VERIFIED"})
+    if baseline:
+        coverage = obj(r.get("baseline_coverage"), "baseline_coverage", ["annual_source_id", "interim_source_id", "freshness_verified"])
+        for field in ["annual_source_id", "interim_source_id"]:
+            value = coverage.get(field)
+            if value is not None and (not isinstance(value, str) or value not in source_ids):
+                err(f"baseline_coverage.{field}", "must reference an accessed source or be null")
+        if type(coverage.get("freshness_verified")) is not bool:
+            err("baseline_coverage.freshness_verified", "must be a boolean")
+        if r.get("research_status") == "COMPLETED":
+            if not coverage.get("annual_source_id") or not coverage.get("interim_source_id") or coverage.get("freshness_verified") is not True:
+                err("baseline_coverage", "completed baseline requires annual, interim and verified freshness")
+            if any(not isinstance(s, dict) or s.get("original_verified") is not True or s.get("access_scope") != "FULL_TEXT" for s in sources):
+                err("sources", "completed baseline requires verified originals")
     if r.get("research_status") == "COMPLETED" and not sources:
         err("sources", "COMPLETED research requires directly accessed source evidence")
 
@@ -277,11 +305,15 @@ def render_markdown(report: dict) -> str:
                   f"실행 시각: {safe(r['executed_at'])} ({safe(r['timezone'])})", "",
                   f"대상 기간: {safe(r['period']['start'])} ~ {safe(r['period']['end'])}", "",
                   f"조사 상태: {safe(r['research_status'])}"])
+    if r.get("report_kind") == "BASELINE":
+        heading("기업 기본 분석 · 자료 범위")
+        lines.append("최근7일 사건 보고서와 별도로 보관하는 기본 자료입니다. 대상 기간은 확인한 자료의 보고기간이며, 최신성·정정 여부의 검증 상태를 함께 확인하세요.")
+        lines.append("최신성 확인: " + ("확인" if r["baseline_coverage"]["freshness_verified"] else "미완료"))
     heading("분석 주제")
     lines.append(safe(r["topic"]))
     heading("요약")
     lines.append(safe(r["summary"]))
-    heading("주요 사건 · 사실과 해석")
+    heading("기업 기본 분석 · 사실과 해석" if r.get("report_kind") == "BASELINE" else "주요 사건 · 사실과 해석")
     if not r["events"]:
         lines.append("조사기간 내 선정 기준을 충족한 검증 사건이 없습니다." if r["research_status"] == "COMPLETED"
                      else "검증된 사건 없음. 이는 중요한 새 소식이 없다는 결론이 아닙니다.")
@@ -307,6 +339,8 @@ def render_markdown(report: dict) -> str:
     if not r["sources"]:
         lines.append("직접 확인한 원문이 없습니다.")
     for s in r["sources"]:
+        if r.get("report_kind") == "BASELINE":
+            lines.extend(["", "자료 구분: " + ("공식 페이지 · 접수정보/목차만 확인" if s["access_scope"] == "METADATA_ONLY" else "공식 원문 확인" if s["source_type"] == "ORIGINAL" else "외부 재게시 · 원본 대조 미완료"), "보고기간: " + safe(s["reporting_period"]), ""])
         lines.extend([f"- {safe(s['id'])}: {safe(s['title'])}",
                       f"  - 게시일: {safe(s['published_at'] or '미확인')}",
                       f"  - URL: <{s['url']}>",

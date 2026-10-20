@@ -1,0 +1,102 @@
+{
+  "run_id": "skhynix-baseline-20261020t170559-kst",
+  "agent_id": "/root/baseline_reviewer",
+  "role": "Reviewer",
+  "started_at": "2026-10-20T17:09:26+09:00",
+  "completed_at": "2026-10-20T17:09:51+09:00",
+  "review": {
+    "execution_status": "COMPLETED",
+    "status": "INSUFFICIENT_EVIDENCE",
+    "reviewer_agent": "/root/baseline_reviewer",
+    "checked_source_ids": [
+      "annual2025-repost",
+      "annual2025-opendart-index",
+      "half2026-opendart-index",
+      "q1-2026-opendart-index",
+      "sec-half2026-index"
+    ],
+    "findings": [
+      {
+        "severity": "INFO",
+        "message": "공식 연간·반기 XBRL 뷰어의 기업명·보고서 종류·목차를 독립 확인했다. 해당 공식 페이지도 기존 DART 보고서와 내용이 다를 수 있다고 안내한다. 본문·재무수치 검증은 아니다.",
+        "event_id": null,
+        "source_ids": [
+          "annual2025-opendart-index",
+          "half2026-opendart-index"
+        ]
+      },
+      {
+        "severity": "INFO",
+        "message": "재게시본에서 DRAM·NAND·MCP 및 HBM·DDR5·eSSD 설명과 생산설비·감가상각 내역을 확인했다. 기업의 최신 상태나 재무 실적 확정값으로 옮기지 않고 재게시본의 서술로 한정하는 것이 적절하다.",
+        "event_id": null,
+        "source_ids": [
+          "annual2025-repost"
+        ]
+      },
+      {
+        "severity": "WARNING",
+        "message": "수정 요청: 연간·반기·1분기와 SEC 색인은 접수정보·목차 수준만 확인했다. 최종 baseline에서 original_verified는 보고서 원본 본문 확인 여부로 정의해 이 공식 메타데이터 출처는 source_type=ORIGINAL이어도 original_verified=false로 저장한다. 본문·재무수치·정정·최신성 검증으로 표시하지 않는다.",
+        "event_id": null,
+        "source_ids": [
+          "annual2025-opendart-index",
+          "half2026-opendart-index",
+          "q1-2026-opendart-index",
+          "sec-half2026-index"
+        ]
+      },
+      {
+        "severity": "WARNING",
+        "message": "수정 요청: 생산설비 사실 문장은 이번 독립 확인 범위인 생산설비·감가상각 내역으로 좁히고, 건설중인자산이라는 구체 항목은 제외한다. 수치 일부가 이어 붙은 추출본에서 금액을 채택하지 않는다.",
+        "event_id": null,
+        "source_ids": [
+          "annual2025-repost"
+        ]
+      },
+      {
+        "severity": "ERROR",
+        "message": "DART 사업보고서 개별 원문 재접근도 Internal Error로 실패했다. 원본 대조·중간보고서 본문·최신 정정 확인이 남아 PARTIAL/INSUFFICIENT_EVIDENCE 및 최종 확정 보류가 필요하다.",
+        "event_id": null,
+        "source_ids": []
+      }
+    ],
+    "limitations": [
+      "공식 XBRL·SEC 페이지는 접수정보/목차만 재확인했다. 실제 재무표나 주석을 확인하지 않았다.",
+      "외부 재게시본과 DART 원본의 일치·정정 여부를 대조하지 못했다.",
+      "조건부 재무 해석은 점검 기준이며 실제 매출·이익·현금흐름 전망의 검증이 아니다.",
+      "Researcher의 SEC 첨부 크기 제한 오류는 이번에 반복 요청하지 않았다."
+    ]
+  },
+  "failures": [
+    {
+      "stage": "Reviewer · DART 개별 사업보고서",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20260317000635",
+      "reason": "공개 웹 조회 도구 Internal Error로 원문을 읽지 못했다.",
+      "resolution": "본문 접근 회복 뒤 새 baseline에서 재게시본 대조와 최신 정정 여부를 확인한다."
+    }
+  ],
+  "access_log": [
+    {
+      "tool": "mcp__codex_apps__search_service_web_run",
+      "batch": 1,
+      "action": "공식 연간·반기 XBRL 및 재게시본 독립 열기",
+      "result": "공식 목차 확인 및 재게시본 표지·주력제품 확인"
+    },
+    {
+      "tool": "mcp__codex_apps__search_service_web_run",
+      "batch": 2,
+      "action": "재게시 HBM·eSSD·경쟁요소 탐색 및 DART 개별보고서 열기",
+      "result": "제품 설명 확인, DART Internal Error, 건설중인 검색 일치 없음"
+    },
+    {
+      "tool": "mcp__codex_apps__search_service_web_run",
+      "batch": 3,
+      "action": "1분기 공식뷰어·SEC색인 열기, 재게시 생산설비·감가상각 탐색",
+      "result": "공식 메타데이터 경로 확인, 재게시 생산설비·감가상각 확인"
+    }
+  ],
+  "revision_requests": [
+    "생산설비 사실에서 건설중인자산을 제외하고 생산설비·감가상각 내역으로 좁힐 것.",
+    "공식 메타데이터 sources는 source_type ORIGINAL, access_scope METADATA_ONLY, original_verified false로 보정하고 원본 본문 확인·최신성 검증 미완료를 유지할 것. Researcher raw기록의 true와 정의 차이를 Manager 수정 이력에 기록할 것."
+  ],
+  "actual_task_summary": "Researcher와 독립된 Reviewer로 공개 웹 조회3회, 검토1회 수행. 재게시 일부 본문과 공식 메타데이터5개 경로를 재확인했다. 재무수치 확정·원본 대조·추가 재검토·유료API·사이트수정은 수행하지 않았다."
+}
